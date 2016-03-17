@@ -20,7 +20,7 @@ public class GestureActivity extends Activity implements View.OnTouchListener,Ge
 
     private GestureDetector gestureDetector = new GestureDetector(this);
 
-    private ImageView imageView;
+    private MatrixImageView imageView;
 
     private int imgLength;
 
@@ -38,18 +38,23 @@ public class GestureActivity extends Activity implements View.OnTouchListener,Ge
     private float distance = 20;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.gesture_layout);
 
-        imageView = (ImageView) findViewById(R.id.imageView);
+        imageView = (MatrixImageView) findViewById(R.id.imageView);
 
+        //从文件夹中读取图片
         File file = new File(strCaptureFilePath+"pictest/");
         if(file.exists()){
             pics = file.listFiles();
             imgLength = pics.length;
         }
+
+        //显示文件夹第一张图片
+        showFistPicture();
 
         imageView.setOnTouchListener(this);
 
@@ -57,6 +62,13 @@ public class GestureActivity extends Activity implements View.OnTouchListener,Ge
 
         gestureDetector.setIsLongpressEnabled(true);
     }
+
+    private void showFistPicture() {
+        File file = pics[0];
+        Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+        imageView.setImageBitmap(bitmap);
+    }
+
 
     @Override
     public boolean onDown(MotionEvent e) {
@@ -99,6 +111,7 @@ public class GestureActivity extends Activity implements View.OnTouchListener,Ge
 
             File file =  pics[Math.abs(picindex) % imgLength];
 
+            //图片转换为bitmap
             Bitmap bitmap= BitmapFactory.decodeFile(file.getAbsolutePath());
 
             imageView.setImageBitmap(bitmap);
@@ -137,4 +150,6 @@ public class GestureActivity extends Activity implements View.OnTouchListener,Ge
         }
         return true;
     }
+
+
 }

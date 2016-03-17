@@ -3,13 +3,7 @@ package com.pqm.morepaizhao;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.ImageFormat;
-import android.graphics.Matrix;
 import android.graphics.PixelFormat;
-import android.graphics.Rect;
-import android.graphics.YuvImage;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.os.Environment;
@@ -22,16 +16,10 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.Toast;
 
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Calendar;
 
 /**
  * Created by licheng on 15/3/16.
@@ -41,8 +29,10 @@ public class CameraActicity extends Activity implements SurfaceHolder.Callback {
     private Camera mCamera;
     private SurfaceView mSurfaceView;
     private SurfaceHolder holder;
-    private ImageView mButton;
+    private Button btnTakePicture;
+    private Button btnStopPicture;
     private Button btnTestPic;
+    private Button btnImageTest;
 
     public int pictureOrientation = 0;
 
@@ -78,10 +68,12 @@ public class CameraActicity extends Activity implements SurfaceHolder.Callback {
         // TODO Auto-generated method stub
 //				mCamera.autoFocus(mAutoFocusCallback);
 		/* 设置拍照Button的OnClick事件处理 */
-        mButton = (ImageView) findViewById(R.id.myButton);
-        mButton.setOnClickListener(new View.OnClickListener() {
+        btnTakePicture = (Button) findViewById(R.id.btnTakePicture);
+        btnTakePicture.setOnClickListener(new View.OnClickListener() {
             public void onClick(View arg0) {
+                //设置拍照预览回调
                 mCamera.setPreviewCallback(prviewCallback);
+                //创建图片存储文件夹
                 secondFile = new File(strCaptureFilePath + "pictest" + "/");
                 if(!secondFile.exists()){
                     secondFile.mkdir();
@@ -89,6 +81,26 @@ public class CameraActicity extends Activity implements SurfaceHolder.Callback {
             }
         });
 
+        //停止拍照
+        btnStopPicture = (Button) findViewById(R.id.btnStopPicture);
+        btnStopPicture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                stopCamera();
+            }
+        });
+
+        //图片缩放测试
+        btnImageTest = (Button) findViewById(R.id.btnImageTest);
+        btnImageTest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(CameraActicity.this,ImageActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        //图片快速切换预览
         btnTestPic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -111,74 +123,16 @@ public class CameraActicity extends Activity implements SurfaceHolder.Callback {
                         Toast.LENGTH_LONG).show();
             }
 
-
             final byte[] yuvdata = bytes;
 
-//            Thread save = new Thread(new Runnable() {
-//                @Override
-//                public void run() {
-//                    Log.v("Camera","save jpeg size"+yuvdata.length);
-//                    String fileName = System.currentTimeMillis() + ".jpeg";
-//                    Log.i("Camera-Orientation",pictureOrientation+"");
-//                    boolean mIsSave = Storage.savePicture(yuvdata, fileName,
-//                            mCamera.getParameters().getPreviewSize(),
-//                            pictureOrientation);
-//                    if(!mIsSave){
-//                        Log.v("Camema","save fail");
-//                    }
-//                }
-//            });
-//            save.start();
-
-            ByteArrayOutputStream out = new ByteArrayOutputStream();
-
-            Calendar c = Calendar.getInstance();
-            String time = formatTimer(c.get(Calendar.YEAR)) + "-"
-                    + formatTimer(c.get(Calendar.MONTH)) + "-"
-                    + formatTimer(c.get(Calendar.DAY_OF_MONTH)) + " "
-                    + formatTimer(c.get(Calendar.HOUR_OF_DAY)) + "."
-                    + formatTimer(c.get(Calendar.MINUTE)) + "."
-                    + formatTimer(c.get(Calendar.SECOND));
-            System.out.println("现在时间：" + time + "  将此时间当作图片名存储");
-
-
-            YuvImage yuvImage = new YuvImage(bytes, ImageFormat.NV21, mCamera.getParameters().getPreviewSize().width,mCamera.getParameters().getPreviewSize().height, null);
-            yuvImage.compressToJpeg(new Rect(0, 0, mCamera.getParameters().getPreviewSize().width, mCamera.getParameters().getPreviewSize().height), 50, out);
-            byte[] imageBytes = out.toByteArray();
-            Bitmap image = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
-            System.out.println("-------previewcallbacktest----"+image);
-            Log.i("CameraActivity","-------previewcallbacktest----"+image);
-
-            //图片旋转方向
-            Bitmap bMapRotate;
-            Matrix matrix = new Matrix();
-            matrix.reset();
-            matrix.postRotate(90);
-            bMapRotate = Bitmap.createBitmap(image, 0, 0, image.getWidth(),
-                    image.getHeight(), matrix, true);
-            image = bMapRotate;
-
-            File second = new File(secondFile,""+time+".jpg");
-
-            BufferedOutputStream bos = null;
-            try {
-                bos = new BufferedOutputStream(
-                        new FileOutputStream(second));
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-
-            /* 采用压缩转档方法 */
-            image.compress(Bitmap.CompressFormat.JPEG, 100, bos);
-
-            System.out.println("this is pass");
-
-            try {
-                bos.flush();
-                bos.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            //另启线程存储图片
+            Thread save = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    StoragePicure.savePicture(yuvdata,mCamera.getParameters().getPreviewSize(),secondFile);
+                }
+            });
+            save.start();
 
         }
     };
@@ -265,10 +219,6 @@ public class CameraActicity extends Activity implements SurfaceHolder.Callback {
         stopCamera();
         mCamera.release();
         mCamera = null;
-    }
-
-    public String formatTimer(int d) {
-        return d >= 10 ? "" + d : "0" + d;
     }
 
     private void getDisplayMetrics() {

@@ -3,9 +3,9 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
+    <com.pqm.morepaizhao.MatrixImageView
         android:layout_width="match_parent"
         android:id="@+id/imageView"
         android:layout_height="match_parent" />
 
-</LinearLayout><!-- From: file:/Users/licheng/Documents/GestureDemo/flashpicture/src/main/res/layout/gesture_layout.xml -->
+</LinearLayout><!-- From: file:/Users/licheng/Documents/MorePaizhao/app/src/main/res/layout/gesture_layout.xml -->

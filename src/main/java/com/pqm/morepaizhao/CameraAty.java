@@ -70,7 +70,7 @@ public class CameraAty extends Activity implements SurfaceHolder.Callback {
 				// TODO Auto-generated method stub
 //				mCamera.autoFocus(mAutoFocusCallback);
 		/* 设置拍照Button的OnClick事件处理 */
-		mButton = (ImageView) findViewById(R.id.myButton);
+		mButton = (ImageView) findViewById(R.id.btnTakePicture);
 		mButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View arg0) {
 				/* 告动对焦后拍照 */

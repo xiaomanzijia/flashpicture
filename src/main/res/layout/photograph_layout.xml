@@ -14,20 +14,42 @@
         android:visibility="visible" />
 
 
-        <ImageView
-            android:id="@+id/myButton"
-            android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:background="@drawable/ic_launcher"
-            android:layout_gravity="center_vertical"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true" />
+
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:text="连续拍照"
+        android:id="@+id/btnTakePicture"
+        android:layout_alignParentBottom="true"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:text="停止拍照"
+        android:id="@+id/btnStopPicture"
+        android:layout_alignParentBottom="true"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/btnTakePicture"
+        android:layout_marginLeft="20dp" />
 
     <Button
         android:layout_width="wrap_content"
         android:text="测试动态效果"
         android:id="@+id/btnTestPic"
-        android:layout_height="wrap_content" />
+        android:layout_alignParentBottom="true"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/btnStopPicture"
+        android:layout_marginLeft="20dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:text="图片缩放测试"
+        android:id="@+id/btnImageTest"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:visibility="gone" />
 
 
 </RelativeLayout>

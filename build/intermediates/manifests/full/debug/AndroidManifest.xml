@@ -29,6 +29,7 @@
             </intent-filter>
         </activity>
         <activity android:name="com.pqm.morepaizhao.GestureActivity" />
+        <activity android:name="com.pqm.morepaizhao.ImageActivity" />
     </application>
 
 </manifest>

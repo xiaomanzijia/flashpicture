@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- From: file:/Users/licheng/Documents/GestureDemo/flashpicture/src/main/res/values/strings.xml -->
+    <!-- From: file:/Users/licheng/Documents/MorePaizhao/app/src/main/res/values/strings.xml -->
     <eat-comment/>
     <string name="app_name">MorePaizhao</string>
     <string name="hello">Hello World, MorePaizhaoActivity!</string>

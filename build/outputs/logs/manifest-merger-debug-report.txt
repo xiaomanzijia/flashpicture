@@ -64,3 +64,7 @@ activity#com.pqm.morepaizhao.GestureActivity
 ADDED from AndroidManifest.xml:28:9
 	android:name
 		ADDED from AndroidManifest.xml:28:19
+activity#com.pqm.morepaizhao.ImageActivity
+ADDED from AndroidManifest.xml:29:9
+	android:name
+		ADDED from AndroidManifest.xml:29:19
